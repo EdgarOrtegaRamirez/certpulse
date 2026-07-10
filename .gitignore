@@ -1,0 +1,22 @@
+# Binaries
+/certpulse
+/bin/
+/dist/
+
+# Test artifacts
+*.out
+coverage.txt
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
