@@ -114,7 +114,7 @@ func TestParseFormat(t *testing.T) {
 func TestWriteText(t *testing.T) {
 	result := sampleResult()
 	var buf bytes.Buffer
-	if err := Write(&buf, &result, FormatText); err != nil {
+	if err := Write(&buf, &result, FormatText, false); err != nil {
 		t.Fatalf("Write text: %v", err)
 	}
 
@@ -136,10 +136,38 @@ func TestWriteText(t *testing.T) {
 	}
 }
 
+func TestWriteText_Verbose(t *testing.T) {
+	result := sampleResult()
+	var buf bytes.Buffer
+	if err := Write(&buf, &result, FormatText, true); err != nil {
+		t.Fatalf("Write text verbose: %v", err)
+	}
+
+	output := buf.String()
+	if !strings.Contains(output, "Subject:") {
+		t.Error("expected verbose output to contain 'Subject:'")
+	}
+	if !strings.Contains(output, "Serial:") {
+		t.Error("expected verbose output to contain 'Serial:'")
+	}
+	if !strings.Contains(output, "SANs:") {
+		t.Error("expected verbose output to contain 'SANs:'")
+	}
+	if !strings.Contains(output, "Key:") {
+		t.Error("expected verbose output to contain 'Key:'")
+	}
+	if !strings.Contains(output, "example.com, www.example.com") {
+		t.Error("expected verbose output to show SANs")
+	}
+	if !strings.Contains(output, "RSA 2048-bit") {
+		t.Error("expected verbose output to show key info")
+	}
+}
+
 func TestWriteJSON(t *testing.T) {
 	result := sampleResult()
 	var buf bytes.Buffer
-	if err := Write(&buf, &result, FormatJSON); err != nil {
+	if err := Write(&buf, &result, FormatJSON, false); err != nil {
 		t.Fatalf("Write JSON: %v", err)
 	}
 
@@ -165,7 +193,7 @@ func TestWriteJSON(t *testing.T) {
 func TestWriteCSV(t *testing.T) {
 	result := sampleResult()
 	var buf bytes.Buffer
-	if err := Write(&buf, &result, FormatCSV); err != nil {
+	if err := Write(&buf, &result, FormatCSV, false); err != nil {
 		t.Fatalf("Write CSV: %v", err)
 	}
 
@@ -197,7 +225,7 @@ func TestWriteCSV(t *testing.T) {
 func TestWrite_UnsupportedFormat(t *testing.T) {
 	result := sampleResult()
 	var buf bytes.Buffer
-	err := Write(&buf, &result, Format("xml"))
+	err := Write(&buf, &result, Format("xml"), false)
 	if err == nil {
 		t.Error("expected error for unsupported format")
 	}
@@ -262,7 +290,7 @@ func TestWriteText_EmptyResult(t *testing.T) {
 		Summary:      report.Summary{},
 	}
 	var buf bytes.Buffer
-	if err := Write(&buf, &result, FormatText); err != nil {
+	if err := Write(&buf, &result, FormatText, false); err != nil {
 		t.Fatalf("Write text: %v", err)
 	}
 	if !strings.Contains(buf.String(), "Summary") {
@@ -278,7 +306,7 @@ func TestWriteJSON_EmptyResult(t *testing.T) {
 		Summary:      report.Summary{},
 	}
 	var buf bytes.Buffer
-	if err := Write(&buf, &result, FormatJSON); err != nil {
+	if err := Write(&buf, &result, FormatJSON, false); err != nil {
 		t.Fatalf("Write JSON: %v", err)
 	}
 
@@ -311,7 +339,7 @@ func TestWriteText_ExpiredCert(t *testing.T) {
 		},
 	}
 	var buf bytes.Buffer
-	if err := Write(&buf, &result, FormatText); err != nil {
+	if err := Write(&buf, &result, FormatText, false); err != nil {
 		t.Fatalf("Write text: %v", err)
 	}
 	if !strings.Contains(buf.String(), "expired") {

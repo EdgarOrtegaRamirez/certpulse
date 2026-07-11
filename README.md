@@ -104,7 +104,7 @@ Outputs a header row followed by one row per certificate with all fields.
 | `--stdin` | | `false` | Read hosts from stdin |
 | `--insecure` | | `false` | Skip certificate chain validation |
 | `--quiet` | `-q` | `false` | Only show warnings and errors |
-| `--verbose` | `-v` | `false` | Show detailed certificate info |
+| `--verbose` | `-v` | `false` | Show detailed certificate info (SANs, serial, key, chain) |
 | `--version` | | | Print version and exit |
 
 ## Architecture

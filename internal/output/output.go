@@ -40,10 +40,10 @@ func ParseFormat(s string) (Format, error) {
 }
 
 // Write writes the check result in the specified format to the writer.
-func Write(w io.Writer, result *report.CheckResult, format Format) error {
+func Write(w io.Writer, result *report.CheckResult, format Format, verbose bool) error {
 	switch format {
 	case FormatText:
-		return writeText(w, result)
+		return writeText(w, result, verbose)
 	case FormatJSON:
 		return writeJSON(w, result)
 	case FormatCSV:
@@ -53,10 +53,10 @@ func Write(w io.Writer, result *report.CheckResult, format Format) error {
 	}
 }
 
-func writeText(w io.Writer, result *report.CheckResult) error {
+func writeText(w io.Writer, result *report.CheckResult, verbose bool) error {
 	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
 
-	fmt.Fprintln(tw, "HOST\tPORT\tSTATUS\tDAYS LEFT\tISSUER\tEXPIRES")
+	fmt.Fprintln(tw, "HOST	PORT	STATUS	DAYS LEFT	ISSUER	EXPIRES")
 	fmt.Fprintln(tw, strings.Repeat("-", 100))
 
 	for _, ci := range result.Certificates {
@@ -72,8 +72,26 @@ func writeText(w io.Writer, result *report.CheckResult) error {
 			daysStr = fmt.Sprintf("%d (expired)", ci.DaysUntilExpiry)
 		}
 
-		fmt.Fprintf(tw, "%s\t%d\t%s\t%s\t%s\t%s\n",
+		fmt.Fprintf(tw, "%s	%d	%s	%s	%s	%s\n",
 			ci.Host, ci.Port, statusIcon(ci.Status), daysStr, truncateIssuer(ci.Issuer), expires)
+
+		if verbose {
+			sanStr := ""
+			if len(ci.SANs) > 0 {
+				sanStr = strings.Join(ci.SANs, ", ")
+			}
+			fmt.Fprintf(tw, "  Subject:       %s\n", ci.Subject)
+			fmt.Fprintf(tw, "  Serial:        %s\n", ci.SerialNumber)
+			fmt.Fprintf(tw, "  SANs:          %s\n", sanStr)
+			fmt.Fprintf(tw, "  Key:           %s %d-bit\n", ci.KeyAlgorithm, ci.KeySize)
+			fmt.Fprintf(tw, "  Signature:     %s\n", ci.SignatureAlgorithm)
+			fmt.Fprintf(tw, "  Version:       %d\n", ci.Version)
+			fmt.Fprintf(tw, "  Valid from:    %s\n", ci.NotBefore.Format("2006-01-02"))
+			fmt.Fprintf(tw, "  Valid until:   %s\n", ci.NotAfter.Format("2006-01-02"))
+			fmt.Fprintf(tw, "  Chain length:  %d\n", ci.ChainLength)
+			fmt.Fprintf(tw, "  Chain valid:   %t\n", ci.ChainValid)
+			fmt.Fprintf(tw, "  Is CA:         %t\n", ci.IsCA)
+		}
 	}
 
 	tw.Flush()

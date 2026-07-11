@@ -120,7 +120,7 @@ func runCheck(cmd *cobra.Command, args []string) error {
 		result = filtered
 	}
 
-	if err := output.Write(os.Stdout, &result, format); err != nil {
+	if err := output.Write(os.Stdout, &result, format, flagVerbose); err != nil {
 		return fmt.Errorf("writing output: %w", err)
 	}
 
