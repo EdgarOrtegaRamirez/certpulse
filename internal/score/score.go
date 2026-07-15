@@ -12,10 +12,10 @@ import (
 
 // SecurityScore holds the scoring results.
 type SecurityScore struct {
-	Score          uint32        `json:"score"`
-	Grade          string        `json:"grade"`
-	Details        []ScoreDetail `json:"details"`
-	Recommendations []string     `json:"recommendations,omitempty"`
+	Score           uint32        `json:"score"`
+	Grade           string        `json:"grade"`
+	Details         []ScoreDetail `json:"details"`
+	Recommendations []string      `json:"recommendations,omitempty"`
 }
 
 // ScoreDetail holds a single scoring category.

@@ -19,12 +19,12 @@ import (
 
 // Config holds generation parameters.
 type Config struct {
-	CN       string
-	SANs     []string
-	Days     int
-	KeySize  int
-	Org      string
-	IsCSR    bool
+	CN         string
+	SANs       []string
+	Days       int
+	KeySize    int
+	Org        string
+	IsCSR      bool
 	OutputCert string
 	OutputKey  string
 }
@@ -71,12 +71,12 @@ func Generate(cfg Config) error {
 
 	if cfg.IsCSR {
 		// Generate CSR
-	 csrReq := &x509.CertificateRequest{
+		csrReq := &x509.CertificateRequest{
 			Subject: pkix.Name{
 				CommonName:   cfg.CN,
 				Organization: []string{cfg.Org},
 			},
-			DNSNames: template.DNSNames,
+			DNSNames:    template.DNSNames,
 			IPAddresses: template.IPAddresses,
 		}
 		csrDER, err := x509.CreateCertificateRequest(rand.Reader, csrReq, key)

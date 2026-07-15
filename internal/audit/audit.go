@@ -12,19 +12,19 @@ import (
 
 // Result holds the audit results.
 type Result struct {
-	Passed       uint32       `json:"passed"`
-	Warnings     uint32       `json:"warnings"`
-	Failures     uint32       `json:"failures"`
-	Checks       []Check      `json:"checks"`
-	OverallPass  bool         `json:"overall_pass"`
+	Passed      uint32  `json:"passed"`
+	Warnings    uint32  `json:"warnings"`
+	Failures    uint32  `json:"failures"`
+	Checks      []Check `json:"checks"`
+	OverallPass bool    `json:"overall_pass"`
 }
 
 // Check is a single audit check.
 type Check struct {
-	ID           string `json:"id"`
-	Name         string `json:"name"`
-	Severity     string `json:"severity"`
-	Message      string `json:"message"`
+	ID             string `json:"id"`
+	Name           string `json:"name"`
+	Severity       string `json:"severity"`
+	Message        string `json:"message"`
 	Recommendation string `json:"recommendation,omitempty"`
 }
 
@@ -209,13 +209,13 @@ func printText(result Result, w io.Writer) error {
 	fmt.Fprintf(w, "Check Results:\n")
 
 	for _, c := range result.Checks {
-	icon := "✓"
-	switch c.Severity {
-	case "warning":
-		icon = "⚠"
-	case "fail":
-		icon = "✗"
-	}
+		icon := "✓"
+		switch c.Severity {
+		case "warning":
+			icon = "⚠"
+		case "fail":
+			icon = "✗"
+		}
 		fmt.Fprintf(w, "  %s %s: %s\n", icon, c.Name, c.Message)
 		if c.Recommendation != "" {
 			fmt.Fprintf(w, "    → %s\n", c.Recommendation)

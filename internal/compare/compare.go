@@ -14,34 +14,34 @@ import (
 type Result struct {
 	Cert1       CertSummary `json:"cert1"`
 	Cert2       CertSummary `json:"cert2"`
-	Differences []DiffEntry   `json:"differences"`
+	Differences []DiffEntry `json:"differences"`
 }
 
 // CertSummary holds a summary of one certificate.
 type CertSummary struct {
-	Source      string   `json:"source"`
-	Subject     string   `json:"subject"`
-	Issuer      string   `json:"issuer"`
-	Serial      string   `json:"serial_number"`
-	NotBefore   string   `json:"not_before"`
-	NotAfter    string   `json:"not_after"`
-	DaysRemain  int64    `json:"days_remaining"`
-	Expired     bool     `json:"expired"`
-	SANs        []string `json:"sans"`
-	SigAlg      string   `json:"signature_algorithm"`
-	KeyAlgo     string   `json:"public_key_algorithm"`
-	KeySize     int      `json:"key_size"`
-	IsCA        bool     `json:"is_ca"`
-	SHA256FP    string   `json:"sha256_fingerprint"`
+	Source     string   `json:"source"`
+	Subject    string   `json:"subject"`
+	Issuer     string   `json:"issuer"`
+	Serial     string   `json:"serial_number"`
+	NotBefore  string   `json:"not_before"`
+	NotAfter   string   `json:"not_after"`
+	DaysRemain int64    `json:"days_remaining"`
+	Expired    bool     `json:"expired"`
+	SANs       []string `json:"sans"`
+	SigAlg     string   `json:"signature_algorithm"`
+	KeyAlgo    string   `json:"public_key_algorithm"`
+	KeySize    int      `json:"key_size"`
+	IsCA       bool     `json:"is_ca"`
+	SHA256FP   string   `json:"sha256_fingerprint"`
 }
 
 // DiffEntry describes a single field difference.
 type DiffEntry struct {
-	Field       string `json:"field"`
-	Cert1Value  string `json:"cert1_value"`
-	Cert2Value  string `json:"cert2_value"`
-	Changed     bool   `json:"changed"`
-	Severity    string `json:"severity"`
+	Field      string `json:"field"`
+	Cert1Value string `json:"cert1_value"`
+	Cert2Value string `json:"cert2_value"`
+	Changed    bool   `json:"changed"`
+	Severity   string `json:"severity"`
 }
 
 // Compare compares two certificates.
